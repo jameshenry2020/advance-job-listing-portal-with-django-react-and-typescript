@@ -8,9 +8,7 @@ from django.utils.translation import gettext_lazy as _
 class MyUser(AbstractBaseUser, PermissionsMixin):
     pkid = models.BigAutoField(primary_key=True, editable=False)
     id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    email = models.EmailField(
-        max_length=255, verbose_name=_("Email Address"), unique=True
-    )
+    email = models.EmailField(max_length=255, verbose_name=_("Email Address"), unique=True)
     first_name = models.CharField(max_length=255, verbose_name = _("First Name"))
     last_name = models.CharField(max_length=255, verbose_name = _("Last Name"))
     is_staff = models.BooleanField(default=False)
@@ -26,7 +24,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
 
     def __str__(self):
-        return self.names
+        return self.first_name
     
 
 
