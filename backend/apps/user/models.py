@@ -11,7 +11,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=255, verbose_name=_("Email Address"), unique=True
     )
-    names = models.CharField(max_length=255, verbose_name = _("Names"))
+    first_name = models.CharField(max_length=255, verbose_name = _("First Name"))
+    last_name = models.CharField(max_length=255, verbose_name = _("Last Name"))
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -20,7 +21,7 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = "email"
 
-    REQUIRED_FIELDS = ["names"]
+    REQUIRED_FIELDS = ["first_name", "last_name"]
 
     objects = MyUserManager()
 

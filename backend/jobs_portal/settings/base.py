@@ -1,6 +1,9 @@
 import environ
 from pathlib import Path
+from datetime import timedelta
+from django.utils.encoding import force_str
 
+force_text = force_str
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -34,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     #third party apps
     'rest_framework',
+    'djoser',
     'django_filters',
+    'social_django',
+    'rest_framework_simplejwt',
     # locals apps
     'apps.user',
     'apps.jobs',
@@ -44,6 +50,7 @@ SITE_ID=1
 AUTH_USER_MODEL='user.MyUser'
 
 MIDDLEWARE = [
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -99,6 +108,52 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1022570077843-pttfei8bctlsj2i2bu5m8vpllho32iqm.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE=['https://www.googleapis.com/auth/userinfo.email',
+                                              'https://www.googleapis.com/auth/userinfo.profile']
+SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA=['first_name', 'last_name']
+
+
+#djoser auth settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
+    ),
+    
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': (
+    'Bearer',
+    'JWT',
+    ),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=120),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'SIGNING_KEY': env("SECRET_KEY"),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+}
+
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    "SET_PASSWORD_RETYPE": True,
+    'SERIALIZERS': {},
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -122,3 +177,14 @@ MEDIA_ROOT = BASE_DIR / 'mediafiles'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_HOST_USER = 'dbd57b9371c2f9'
+EMAIL_HOST_PASSWORD = 'bdb5540a1b336b'
+EMAIL_PORT = '2525'
+DEFAULT_FROM_EMAIL = 'info@henryjobportal.com'
+DOMAIN='locahost:8000'
+SITE_NAME = 'Henry Remote Job Portal'
