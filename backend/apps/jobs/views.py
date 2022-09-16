@@ -4,11 +4,19 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import CompanyCreateSerializer, CompanySerializers, CreateJobSerializer, JobSerializer
+from .serializers import CompanyCreateSerializer, CompanySerializers, CreateJobSerializer, JobSerializer, CompanyJobSerializer
 from .models import JobSkill, Company, Job
+from rest_framework.pagination import PageNumberPagination
+from django_filters.rest_framework import DjangoFilterBackend
+
+class JobsPagination(PageNumberPagination):
+    page_size = 5
+    page_size_query_param ='page_size'
+    max_page_size=10
+
+
 
 # Create your views here.
-
 class GetallSkills(APIView):
     permission_classes=[AllowAny]
 
@@ -53,7 +61,12 @@ class AddJobToListing(CreateAPIView):
 class GetAllRecentJobs(ListAPIView):
     serializer_class=JobSerializer
     queryset=Job.objects.all()
-    permission_classes=[AllowAny]
+    pagination_class = JobsPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['job_title', 'region']
+
+
+
     
 
 class GetSingleJobDetails(RetrieveAPIView):
@@ -61,3 +74,19 @@ class GetSingleJobDetails(RetrieveAPIView):
     queryset=Job.objects.all()
     permission_classes=[AllowAny]
     lookup_field='id'
+
+
+
+#get list of job post by a company
+class GetJobsPostedByCompany(ListAPIView):
+    serializer_class=CompanyJobSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get_queryset(self):
+        company=Company.objects.get(user=self.request.user)
+        return Job.objects.filter(company=company)
+
+
+
+
+#jobs search   

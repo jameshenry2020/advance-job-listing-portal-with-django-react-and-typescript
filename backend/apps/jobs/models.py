@@ -38,6 +38,7 @@ class Job(CommonUUIDModel):
     job_zone=models.CharField(max_length=200, blank=True, null=True)
     salary=models.CharField(max_length=100, verbose_name=_("Expected Salary"))
     application=models.CharField(max_length=100)
+    job_description=models.TextField(default='this is a test description')
 
     def __str__(self):
         return self.job_title

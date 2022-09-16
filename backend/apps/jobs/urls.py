@@ -2,8 +2,9 @@ from django.urls import path
 from .views import (GetallSkills,
                     GetAllRecentJobs,
                     AddJobToListing,
-                     CreateCompanyProfile,
-                      GetCompanyDetail, GetSingleJobDetails)
+                    CreateCompanyProfile,
+                    GetCompanyDetail, 
+                    GetSingleJobDetails, GetJobsPostedByCompany)
 
 
 urlpatterns=[
@@ -12,6 +13,6 @@ urlpatterns=[
     path('skills/', GetallSkills.as_view(), name='all-skills'),
     path('add-jobs/', AddJobToListing.as_view(), name='jobs'),
     path('jobs/', GetAllRecentJobs.as_view(), name='jobs'),
-    path('jobs/<uuid:id>/', GetSingleJobDetails.as_view(), name='job-detail')
-    
+    path('jobs/<uuid:id>/', GetSingleJobDetails.as_view(), name='job-detail'),
+    path('company/jobs/', GetJobsPostedByCompany.as_view(), name='copany-jobs')
 ]

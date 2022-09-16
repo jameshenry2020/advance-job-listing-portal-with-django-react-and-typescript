@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django_filters',
     'social_django',
     'rest_framework_simplejwt',
+    "corsheaders",
+    'drf_yasg',
     # locals apps
     'apps.user',
     'apps.jobs',
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -81,6 +84,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'jobs_portal.wsgi.application'
+
+CORS_ALLOWED_ORIGINS = [ 
+    "http://localhost:3000",
+    
+]
 
 
 # Database
@@ -121,6 +129,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE=['https://www.googleapis.com/auth/userinfo.email
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA=['first_name', 'last_name']
 
 
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS':{
+     "Auth Token eg [Bearer (JWT)]":{
+        "type":"apiKey",
+        "name":"Authorization",
+        "in":"header"
+     }
+   }
+}
 #djoser auth settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

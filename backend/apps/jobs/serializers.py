@@ -70,3 +70,27 @@ class JobSerializer(serializers.ModelSerializer):
 
     def get_skills(self, obj):
         return SkillSerializers(obj.skills.all(), many=True).data
+
+
+
+class CompanyJobSerializer(serializers.ModelSerializer):
+    skills=serializers.SerializerMethodField()
+    class Meta:
+        model=Job
+        fields= [
+            "id",
+            "pkid",
+            "job_title",
+            "category",
+            "job_type",
+            "region",
+            "job_zone",
+            "salary",
+            "application",
+            "job_description",
+            "skills"
+
+        ]
+
+    def get_skills(self, obj):
+        return SkillSerializers(obj.skills.all(), many=True).data
