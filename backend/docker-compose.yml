@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  api:
+    container_name: job-board-api
+    build: 
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start
+    volumes:
+      - .:/app
+      - media_volume:/app/mediafiles
+
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+
+    depends_on:
+      - postgres_db
+    networks:
+      - job-portal
+
+  postgres_db:
+    image: postgres:14.4-alpine
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - job-portal
+
+
+networks:
+  job-portal:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  media_volume:
+    

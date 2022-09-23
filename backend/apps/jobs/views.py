@@ -89,4 +89,9 @@ class GetJobsPostedByCompany(ListAPIView):
 
 
 
-#jobs search   
+#dockerize api
+
+#send application email implement celery to send email asyncrously
+
+#push to github
+

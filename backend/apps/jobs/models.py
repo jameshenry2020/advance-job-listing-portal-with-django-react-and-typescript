@@ -32,7 +32,7 @@ class Job(CommonUUIDModel):
     company=models.ForeignKey(Company, on_delete=models.CASCADE)
     job_title=models.CharField(max_length=255, verbose_name=_("Job Title"))
     category=models.CharField(max_length=100, verbose_name=_("Job Category"))
-    skills=models.ManyToManyField(JobSkill, null=True)
+    skills=models.ManyToManyField(JobSkill)
     job_type=models.CharField(max_length=200, verbose_name=_("Job Type"))
     region=models.CharField(max_length=255, verbose_name=_("Job Region"), default="world wide")
     job_zone=models.CharField(max_length=200, blank=True, null=True)
@@ -46,5 +46,17 @@ class Job(CommonUUIDModel):
 
 
 
+class Application(CommonUUIDModel):
+    position=models.ForeignKey(Job, related_name='applications', on_delete=models.CASCADE)
+    applicant_name=models.CharField(max_length=250, verbose_name=_("Names"))
+    email=models.EmailField(max_length=200)
+    resume=models.FileField(upload_to='jobs')
+    github_link=models.URLField(max_length=200)
+    portfolio_link=models.URLField(max_length=200)
+
+    def __str__(self):
+        return f"applicant-${self.pkid} for ${self.job.job_title}"
+
+    
 
 
