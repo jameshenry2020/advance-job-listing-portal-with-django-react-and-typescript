@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -o errexit
+
+set -o nounset
+
+watchmedo auto-restart -d jobs_portal/ -p "*.py" -- celery worker -A jobs_portal --loglevel=info

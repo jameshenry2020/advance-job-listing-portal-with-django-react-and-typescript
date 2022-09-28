@@ -5,9 +5,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import CompanyCreateSerializer, CompanySerializers, CreateJobSerializer, JobSerializer, CompanyJobSerializer
-from .models import JobSkill, Company, Job
+from .models import Application, JobSkill, Company, Job
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.mail import EmailMessage
+from .serializers import ApplicationSerializer
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from jobs_portal.settings.dev import DEFAULT_FROM_EMAIL
 
 class JobsPagination(PageNumberPagination):
     page_size = 5
@@ -92,6 +96,37 @@ class GetJobsPostedByCompany(ListAPIView):
 #dockerize api
 
 #send application email implement celery to send email asyncrously
+class SendApplicationView(APIView):
+    parser_classes=[MultiPartParser, FormParser]
+    permission_classes=[AllowAny]
+    def post(self, request, *args, **kwargs):
+        data=request.data
+        serializer=ApplicationSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True): 
+            posted_job=Job.objects.get(pkid=data['position'])
+            company_email=posted_job.company.company_email
+            from_email=DEFAULT_FROM_EMAIL
+            email_subject=f"Appliation for the role {posted_job.job_title}"
+            msg_body=f"application of {data['applicant_name']} for the role of {posted_job.job_title} \n\n  portofolio link {data['portfolio_link']} \n\n github link {data['github_link']} \n\n applicant email {data['email']} "
+            pdf_file=request.data.get('resume')
+            print(pdf_file)
+            message=EmailMessage(
+                email_subject,
+                msg_body,
+                from_email,
+                [company_email],
+
+            )
+            message.attach(pdf_file.name, pdf_file.read(), 'application/pdf')
+            message.send(fail_silently=False)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)   
+
+                  
+
+        # return Response({"failed":"email not sent"}, status=status.HTTP_400_BAD_REQUEST)           
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 #push to github
 

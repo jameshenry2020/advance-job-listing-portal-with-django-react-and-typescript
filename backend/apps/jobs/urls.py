@@ -4,7 +4,9 @@ from .views import (GetallSkills,
                     AddJobToListing,
                     CreateCompanyProfile,
                     GetCompanyDetail, 
-                    GetSingleJobDetails, GetJobsPostedByCompany)
+                    GetSingleJobDetails, 
+                    GetJobsPostedByCompany,
+                     SendApplicationView)
 
 
 urlpatterns=[
@@ -14,5 +16,6 @@ urlpatterns=[
     path('add-jobs/', AddJobToListing.as_view(), name='jobs'),
     path('jobs/', GetAllRecentJobs.as_view(), name='jobs'),
     path('jobs/<uuid:id>/', GetSingleJobDetails.as_view(), name='job-detail'),
-    path('company/jobs/', GetJobsPostedByCompany.as_view(), name='copany-jobs')
+    path('company/jobs/', GetJobsPostedByCompany.as_view(), name='copany-jobs'),
+    path('job/application/', SendApplicationView.as_view(), name='jobs-application')
 ]

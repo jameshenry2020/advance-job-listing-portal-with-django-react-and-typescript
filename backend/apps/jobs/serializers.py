@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Company, Job, JobSkill
+from .models import Application, Company, Job, JobSkill
 
 
 
@@ -72,9 +72,19 @@ class JobSerializer(serializers.ModelSerializer):
         return SkillSerializers(obj.skills.all(), many=True).data
 
 
+class ApplicationSerializer(serializers.ModelSerializer):
+    resume=serializers.FileField(max_length=150)
+    class Meta:
+        model=Application
+        fields = ['id', 'applicant_name', 'email', 'resume', 'github_link', 'portfolio_link', 'position']
+
+
+
+
 
 class CompanyJobSerializer(serializers.ModelSerializer):
     skills=serializers.SerializerMethodField()
+    nums_of_applicant=serializers.SerializerMethodField()
     class Meta:
         model=Job
         fields= [
@@ -88,9 +98,16 @@ class CompanyJobSerializer(serializers.ModelSerializer):
             "salary",
             "application",
             "job_description",
-            "skills"
+            "skills",
+            "nums_of_applicant"
 
         ]
 
     def get_skills(self, obj):
         return SkillSerializers(obj.skills.all(), many=True).data
+
+    def get_nums_of_applicant(self, obj):
+        return obj.applications.all().count()
+
+
+

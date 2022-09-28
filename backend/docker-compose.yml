@@ -17,6 +17,7 @@ services:
       - .env
 
     depends_on:
+      - redis
       - postgres_db
     networks:
       - job-portal
@@ -31,6 +32,44 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      - job-portal
+  
+  redis:
+    image: redis:5-alpine
+    networks:
+      - job-portal
+
+  celery_worker:
+    build: 
+      context: .  
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-celeryworker
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - postgres_db
+    networks:
+      - job-portal
+
+  flower:
+    build: 
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    command: /start-flower
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+
+    ports:
+      - "5557:5555"
+    depends_on:
+      - redis
+      - postgres_db
     networks:
       - job-portal
 
