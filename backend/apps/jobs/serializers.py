@@ -53,6 +53,7 @@ class JobSerializer(serializers.ModelSerializer):
         fields= [
             "id",
             "pkid",
+            "created_at",
             "job_title",
             "category",
             "job_type",

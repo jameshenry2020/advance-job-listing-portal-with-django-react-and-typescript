@@ -14,9 +14,19 @@ from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from jobs_portal.settings.dev import DEFAULT_FROM_EMAIL
 
 class JobsPagination(PageNumberPagination):
-    page_size = 5
+    page_size = 4
     page_size_query_param ='page_size'
     max_page_size=10
+
+    def get_paginated_response(self, data):
+        return Response({  
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'page_number': self.page.number,
+            'count': self.page.paginator.count,
+            'results': data,
+            
+        })
 
 
 
@@ -64,7 +74,7 @@ class AddJobToListing(CreateAPIView):
 
 class GetAllRecentJobs(ListAPIView):
     serializer_class=JobSerializer
-    queryset=Job.objects.all()
+    queryset=Job.objects.all().order_by('-created_at')
     pagination_class = JobsPagination
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['job_title', 'region']
