@@ -24,13 +24,20 @@ const JobForm = () => {
     const handleRadiochange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setJobopen(e.target.value)
     }
+
+    const handleChange=()=>{
+        console.log('hi there')
+    }
   return (
     <div className='w-full mt-20 flex justify-center items-center'>
         <div className='bg-white rounded shadow w-2/3 h-auto py-6 border border-gray-200'>
             <h3 className='capitalize text-2xl font-bold font-serif px-4 my-4'>Tell Us about the Position</h3>
         <form className="w-full"> 
                     <div className="w-full  px-3 mb-6 md:mb-0">
-                    <Form name='name' placeholder='position ' label='Job Title' />
+                    <Form value=''
+                     name='name'
+                     onChange={handleChange} 
+                     placeholder='position ' label='Job Title' />
                     <p className="text-gray-500 text-sm pt-0 italic">Example: “Senior Designer”. Titles must describe one position..</p>
                     </div>
                     <div className='w-full grid grid-cols-2'>  
@@ -133,7 +140,10 @@ const JobForm = () => {
                         </div>
                     </div>
                     <div className="w-full  px-3 mb-6 md:mb-0">
-                    <Form name='application-mode' placeholder='Aplication Link or HR Email ' label='Aplication Link or Email' />
+                    <Form value=''
+                     name='application-mode'
+                     onChange={handleChange} 
+                     placeholder='Aplication Link or HR Email ' label='Aplication Link or Email' />
                     <p className="text-gray-500 text-sm pt-0 italic">Example: ”. application link or your company hr email.</p>
                     </div>
 

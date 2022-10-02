@@ -2,10 +2,13 @@ import React, {useState, useEffect} from 'react'
 import { FiAlignJustify,  } from "react-icons/fi";
 import { FaTimes  } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../app/hooks";
 
 const Navbar = () => {
     const [openMenu, setOpenMenu]=useState(false)
     const [stickyClass, setStickyClass] = useState('relative');
+
+    const globalState=useAppSelector((state)=> state.authentication.auth)
 
     useEffect(() => {
         window.addEventListener('scroll', stickNavbar);
@@ -41,7 +44,16 @@ const Navbar = () => {
                         <li className='bg-red-600 text-white rounded-md'>
                            <button> Post a Job</button>   
                         </li>
-                        <Link to='/login' className='px-6 py-2 rounded-md bg-blue-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'>Log In</Link>
+                        {globalState.access ? (
+                            <>
+                            <Link to='/logout' className='px-6 py-2 rounded-md bg-blue-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'>Log Out</Link>
+                            <Link to='/profile' className='px-6 py-2 rounded-md bg-blue-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'>profile</Link>
+                            </>
+                        ):(
+
+                            <Link to='/login' className='px-6 py-2 rounded-md bg-blue-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'>Log In</Link>
+                        )}
+                       
                     </ul>
                 </div>
                 <div onClick={toggleMenu} className='block md:hidden'>

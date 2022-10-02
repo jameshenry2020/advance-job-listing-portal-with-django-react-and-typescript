@@ -61,6 +61,7 @@ class JobSerializer(serializers.ModelSerializer):
             "job_zone",
             "salary",
             "application",
+            "job_description",
             "company",
             "skills"
 

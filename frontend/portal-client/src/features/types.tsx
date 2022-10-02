@@ -28,11 +28,37 @@ export type JobData={
     category: string,
     job_type: string,
     region: string
-    job_zone: null,          
+    job_zone: null | string,          
     application: string,
+    job_description:string
 }
 
 export type SearchParam={
     jobName:string,
     location:string
+}
+
+export interface UserReturnData{ //user for signup and retrieve user request
+    pkid:number,
+    email:string,
+    first_name:string,
+    last_name:string,
+}
+
+export type LoginReturnType={
+    refresh:string,
+    access:string
+}
+
+export interface AuthError{
+    errorMessage:string,
+    field_errors:Record<string, string>
+}
+
+export type SignupDataType={
+    email:string,
+    first_name:string,
+    last_name:string,
+    password:string,
+    re_password:string
 }

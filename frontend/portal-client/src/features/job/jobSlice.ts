@@ -26,6 +26,15 @@ async (params:SearchParam) => {
     return response
 })
 
+
+export const getJobDetails=createAsyncThunk('jobs/getJobDetails',
+  async (job_id:string) => {
+      const res = await APIRequest.get(`jobs/${job_id}/`)
+      const response:JobData = res.data
+      return response
+})
+
+
 interface ResponseType{
     count:number
     next:string | null
@@ -35,10 +44,12 @@ interface ResponseType{
 }
 
 
+
 type StateType={
     jobs:ResponseType
     loading:boolean
     error:string
+    job_detail:JobData
 
 }
 
@@ -51,7 +62,33 @@ const initialState:StateType={
         results:[],
     },
     loading:false,
-    error:""
+    error:"",
+    job_detail:{
+        id:'',
+        pkid: 0,
+        created_at: '',
+        company:{
+            pkid: 0,
+            id: '',
+            created_at: '',
+            company_name: '',
+            location: '',
+            website: '',
+            company_email: '',
+            company_logo: '',
+            description: '',
+            user: 0
+        },
+        job_title:'',
+        salary:'',
+        skills:[],
+        category: '',
+        job_type: '',
+        region: '',
+        job_zone: null,          
+        application: '',
+        job_description:''
+    }
 }
 
 const jobSlice= createSlice({
@@ -103,6 +140,22 @@ const jobSlice= createSlice({
             
         })
         .addCase(searchJobList.rejected, (state, action)=>{
+            if (action.error){
+                state.error=action.error.message || "";
+                state.loading=false;
+            } 
+        })
+
+        .addCase(getJobDetails.pending, (state)=>{
+            state.loading=true
+
+        })
+        .addCase(getJobDetails.fulfilled, (state, action)=>{
+            state.loading=false
+            state.job_detail=action.payload
+            
+        })
+        .addCase(getJobDetails.rejected, (state, action)=>{
             if (action.error){
                 state.error=action.error.message || "";
                 state.loading=false;
