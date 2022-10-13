@@ -30,7 +30,24 @@ export type JobData={
     region: string
     job_zone: null | string,          
     application: string,
-    job_description:string
+    job_description:string,
+    
+}
+export type CompanyJobType={
+    id:string,
+    pkid: number,
+    created_at: string,
+    job_title:string,
+    salary:string,
+    skills:Skills[],
+    category: string,
+    job_type: string,
+    region: string
+    job_zone: null | string,          
+    application: string,
+    job_description:string,
+    nums_of_applicant:number
+    
 }
 
 export type SearchParam={

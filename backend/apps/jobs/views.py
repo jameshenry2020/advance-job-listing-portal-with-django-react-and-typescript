@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView,CreateAPIView, RetrieveAPIView
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -53,11 +54,22 @@ class CreateCompanyProfile(CreateAPIView):
 
 
 
-class GetCompanyDetail(RetrieveAPIView):
-    serializer_class=CompanySerializers
+class GetCompanyDetail(APIView):
     permission_classes=[IsAuthenticated]
-    queryset=Company.objects.all()
-    lookup_field='id'
+    def get(self, request, *args, **kwargs):
+        companies=Company.objects.filter(user=request.user)
+        if companies.exists():
+            company=companies[0]
+            serializer=CompanySerializers(company)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response({'msg':'oop you dont has a company profile yet create a profile'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    
+
+
+    
+    
     
     
 
@@ -139,4 +151,10 @@ class SendApplicationView(APIView):
 
 
 #push to github
+@api_view()
+def check_user_has_company(request):
+    user_company=Company.objects.filter(user=request.user)
+    if user_company.exists():
+        return Response({"hasCompany":True}, status=status.HTTP_200_OK)
+    return Response({"hasCompany":False}, status=status.HTTP_200_OK)
 

@@ -79,12 +79,22 @@ export const getLoggedInUser=createAsyncThunk(
     async () => {
         const response=await APIRequest.get('auth/users/me/');
         const res:UserReturnData=response.data
+        return res;
+    })
+
+export const checkuserCompany=createAsyncThunk(
+    'auth/checkuserCompany',
+    async () => {
+        const response=await APIRequest.get('/users/has-company/');
+        const res:checkType=response.data
         return res
     })
 
 
 
-
+type checkType={
+    hasCompany:boolean
+}
 
 
 type AuthState={
@@ -95,7 +105,8 @@ type AuthState={
     errors:string | null | undefined
     isSuccess:boolean
     message:string
-    activate_status:number
+    activate_status:number,
+    hasCompany:checkType
 }
 
 
@@ -116,6 +127,9 @@ const initialState:AuthState={
     isSuccess:false,
     message:'',
     activate_status:0,
+    hasCompany:{
+        hasCompany:false
+    }
 }
 
 
@@ -133,6 +147,35 @@ const authSlice=createSlice({
             state.errors=null
 
         },
+        reset:(state)=>{
+                state.user={
+                    pkid:0,
+                    first_name:"",
+                    last_name:"",
+                    email:""
+                }
+                state.auth={
+                    refresh:"",
+                    access:""
+                }
+                state.isAuthenticated=false
+                state.loading=false
+                state.errors=null
+                state.isSuccess=false
+        },
+
+        persistLogInUser:(state)=>{
+            let user=localStorage.getItem('user') || ""
+            let token=localStorage.getItem('token')
+            if (token) {
+                state.auth.access=token 
+            }
+            if (user) {
+                state.user=JSON.parse(user)
+            }
+               
+            
+        }
     },
     extraReducers(builder) {
         builder
@@ -179,14 +222,12 @@ const authSlice=createSlice({
         .addCase(loginUser.fulfilled, (state, action)=>{
              localStorage.setItem('token', action.payload.access)
              localStorage.setItem('refresh_token', action.payload.refresh)
-             state.auth.access=JSON.parse(localStorage.getItem('token') || "")
-             state.auth.refresh=JSON.parse(localStorage.getItem('refresh_token') || "")
-             if(localStorage.getItem('token')){
-                state.isAuthenticated=true
-                state.isSuccess=true
-             }
+             state.auth=action.payload
+             state.isAuthenticated=true
+             state.isSuccess=true
              state.loading=false       
             state.message="login success"
+            state.errors=""
         })
         .addCase(loginUser.rejected, (state, action)=>{
             if (action.payload) {
@@ -205,19 +246,30 @@ const authSlice=createSlice({
         })
         .addCase(getLoggedInUser.fulfilled, (state, action)=>{
              localStorage.setItem('user', JSON.stringify(action.payload))
-             state.user=JSON.parse(localStorage.getItem('user') || "")
-             state.isSuccess=true
              state.loading=false
+             state.user=action.payload
+             state.isAuthenticated=true
                 
         })
-        .addCase(getLoggedInUser.rejected, (state, action)=>{  
-                state.isSuccess=false
+        .addCase(getLoggedInUser.rejected, (state, action)=>{ 
+                state.errors = action.error.message 
+                state.loading=false                 
+        })
+
+        .addCase(checkuserCompany.pending, (state)=>{
+            state.loading=true
+        })
+        .addCase(checkuserCompany.fulfilled, (state, action)=>{
+             state.loading=false
+             state.hasCompany=action.payload
+                
+        })
+        .addCase(checkuserCompany.rejected, (state, action)=>{ 
                 state.errors = action.error.message
-                state.message="you are not authorized"
-                        
+                state.loading=false                  
         })
     },
 })
 
-export const { logout }=authSlice.actions
+export const { logout,reset, persistLogInUser }=authSlice.actions
 export default authSlice.reducer;

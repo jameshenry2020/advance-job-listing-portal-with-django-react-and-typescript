@@ -45,7 +45,7 @@ const Home = () => {
      
         
   return (
-    <>
+    <div className='w-full h-full relative'>
     <Navbar/>
     <Banner/>
     <SearchForm/>
@@ -68,7 +68,7 @@ const Home = () => {
          </>
        )} 
     
-    </>
+    </div>
   )
 }
 

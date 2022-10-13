@@ -14,15 +14,8 @@ const LoginForm = () => {
     email:"",
     password:""
   })
- const authState=useAppSelector((state)=>state.authentication)
- const {auth, loading, errors, message}=authState
-   const token=localStorage.getItem('token')
-  useEffect(()=>{
-      if (token !== null) {
-        navigate("/")
-        toast.warning("you are aleady login")
-      }
-  },[token])
+ 
+  
 
 
   const handleChange=(e: React.ChangeEvent<HTMLInputElement>)=>{
@@ -39,31 +32,38 @@ const LoginForm = () => {
          toast.warning("password is required")
       }
       const data={email, password}
-
       try {
-        await dispatch(loginUser(data)).unwrap()
-        navigate("/profile")
-        toast.success(message)
+          const res = await dispatch(loginUser(data)).unwrap()
+          if (res) {
+            navigate("/")
+            toast.success("login successful")
+          }
+
       } catch (rejectedValueOrSerializedError) {
-        toast.error(errors)
+        toast.error("invalid credentials please try again")
+        console.log(rejectedValueOrSerializedError)
+        return;
       }
-
+        
+        
       
-
-
-
-
   }
 
 
   return (
-    <div className='w-full mt-20 flex justify-center items-center'>
+    <div className='w-full pt-20 flex justify-center items-center'>
         <div className='bg-white rounded shadow w-1/2 h-auto py-6 border border-gray-200'>
            <h3 className='text-4xl font-semibold text-center pt-4 pb-2 font-serif'>Login</h3>
            
             <form onSubmit={handleSubmit} className='px-8 pt-6 pb-2 mb-4 w-[80%] mx-auto'>
-                <Form name='email' value={credentials.email} onChange={handleChange}  placeholder='email' label='Email address' />
-                <Form name='password' value={credentials.password} onChange={handleChange}    placeholder='your password' label='Password' />
+                <Form name='email' 
+                value={email} 
+                onChange={handleChange} 
+                 placeholder='email' label='Email address' />
+                <Form name='password'
+                 value={password}
+                  onChange={handleChange} 
+                  placeholder='your password' label='Password' />
                 <button className='py-3 px-8 bg-gray-800 text-white rounded'>Login</button>
              </form>
              <div className='w-full  px-8  flex justify-center items-center flex-col'>
