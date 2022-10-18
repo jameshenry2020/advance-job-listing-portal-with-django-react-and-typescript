@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import Logo from "../assets/logo.png"
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { getCompanyDetail } from "../features/company/companySlice";
+
 import Spinner from './Spinner';
 
 
@@ -14,14 +14,10 @@ type ProfileProps={
 
 const ProfileBanner = ({check}:ProfileProps) => {
    const dispatch=useAppDispatch();
-   const {company, loading}=useAppSelector((state)=>state.company)
+   const {company}=useAppSelector((state)=>state.company)
    
-  useEffect(() => {
-    if (check.hasCompany===true) {
-      dispatch(getCompanyDetail())
-    }
-    
-  }, [dispatch, check])
+  
+
   
   return (
     <div className='w-full pt-12'>

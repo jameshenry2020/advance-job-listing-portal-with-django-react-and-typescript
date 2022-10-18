@@ -143,25 +143,19 @@ const authSlice=createSlice({
             localStorage.removeItem('token')
             localStorage.removeItem('refresh_token')
             localStorage.removeItem('user')
+            state.auth={
+                refresh:"",
+                access:""
+            }
+            state.user={
+                pkid:0,
+                first_name:"",
+                last_name:"",
+                email:""
+            }
             state.isAuthenticated=false
             state.errors=null
 
-        },
-        reset:(state)=>{
-                state.user={
-                    pkid:0,
-                    first_name:"",
-                    last_name:"",
-                    email:""
-                }
-                state.auth={
-                    refresh:"",
-                    access:""
-                }
-                state.isAuthenticated=false
-                state.loading=false
-                state.errors=null
-                state.isSuccess=false
         },
 
         persistLogInUser:(state)=>{
@@ -169,6 +163,8 @@ const authSlice=createSlice({
             let token=localStorage.getItem('token')
             if (token) {
                 state.auth.access=token 
+            }else{
+                state.auth.access=""
             }
             if (user) {
                 state.user=JSON.parse(user)
@@ -271,5 +267,5 @@ const authSlice=createSlice({
     },
 })
 
-export const { logout,reset, persistLogInUser }=authSlice.actions
+export const { logout, persistLogInUser }=authSlice.actions
 export default authSlice.reducer;

@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 const JobApplication = () => {
   return (
     <div>
-        <Navbar/>
+        
     </div>
   )
 }

@@ -11,6 +11,11 @@ export interface Company{
       user: number
 }
 
+export type SkillsOption={
+    value:number,
+    label:string
+}
+
 export type Skills={
     id:number,
     name:string

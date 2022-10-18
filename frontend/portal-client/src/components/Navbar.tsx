@@ -3,12 +3,12 @@ import { FiAlignJustify,  } from "react-icons/fi";
 import { FaTimes  } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
-import { persistLogInUser, logout, reset } from "../features/auth/authSlice";
+import { persistLogInUser, logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     const [openMenu, setOpenMenu]=useState(false)
-    const [stickyClass, setStickyClass] = useState('fixed');
+    const [stickyClass, setStickyClass] = useState('fixed top-0');
     const dispatch=useAppDispatch()
     const navigate=useNavigate()
     const token=localStorage.getItem('token')
@@ -20,11 +20,7 @@ const Navbar = () => {
           window.removeEventListener('scroll', stickNavbar);
         };
       }, []);
-    useEffect(() => {
-        if (token !==null) {
-            dispatch(persistLogInUser()) 
-        }   
-    }, [token, dispatch])
+  
     
 
     const stickNavbar = ()=>{
@@ -38,10 +34,9 @@ const Navbar = () => {
         setOpenMenu(!openMenu)
         
     }
-    const handleLogout=()=>{
-          dispatch(logout())
-          navigate("/login")
-          dispatch(reset())                 
+    const handleLogout= async()=>{
+          await dispatch(logout())
+          navigate("/login")                              
     }
     
 
@@ -57,12 +52,12 @@ const Navbar = () => {
                         <li className=''>Remote Companies</li>
                         <li className=''>Create a Cv</li>
                         <li className='bg-red-600 text-white rounded-md'>
-                           <Link to={'/new-post'} className='px-6 py-2 rounded-md bg-red-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'> Post a Job</Link>   
+                           <Link to={'/new-post'} reloadDocument className='px-6 py-2 rounded-md bg-red-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'> Post a Job</Link>   
                         </li>
-                        {globalState.access !== "" ? (
+                        {token !== null ? (
                             <>
                             <button onClick={handleLogout} className='px-6 py-2 rounded-md bg-blue-500 text-center text-lg font-bold text-white shadow-sm cursor-pointer'>Log Out</button>
-                            <Link to='/profile' className='px-6 py-2  text-center text-lg font-bold text-gray-600  cursor-pointer'>profile</Link>
+                            <Link to='/profile' reloadDocument className='px-6 py-2  text-center text-lg font-bold text-gray-600  cursor-pointer'>profile</Link>
                             </>
                         ):(
 

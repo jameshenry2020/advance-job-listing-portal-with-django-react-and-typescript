@@ -28,7 +28,7 @@ const JobCard =({id, job_title, company, region, salary, skills, created_at}:Job
        </div>
        <div className=''>
             <p>{skills.map((skill)=>(
-                <span key={skill.id} className='mr-1'>{skill.name}</span>
+                <span key={skill.id} className='mr-1 bg-indigo-500'>{skill.name}</span>
             ))}</p>
        </div>
        <div className='flex space-x-4 items-center'>

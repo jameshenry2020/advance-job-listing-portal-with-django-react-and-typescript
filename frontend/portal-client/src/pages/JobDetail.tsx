@@ -20,7 +20,6 @@ const JobDetail = () => {
   console.log(job)
   return (
     <>
-      <Navbar/>
       <BackLink />
       <Details job={job} />
     </>

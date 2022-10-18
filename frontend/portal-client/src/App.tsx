@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import {
+  BrowserRouter as Router,
   Routes,
   Route,
 } from "react-router-dom";
@@ -14,24 +15,30 @@ import UserProfile from './pages/UserProfile';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";
 import Activate from './pages/Activate';
+import Navbar from './components/Navbar';
+import PrivateRoutes from './utils/PrivateRoutes';
 
 
 
 function App() {
   return (
-    <>
-      <ToastContainer/>
+    <Router>
+    <ToastContainer/>
+      <Navbar/>
        <Routes>
-          <Route index element={<Home/>} />    
-          <Route path="/remote-work/:jobId" element={<JobDetail/>} />
-          <Route path="/new-post" element={<NewPost />} />
+          <Route index element={<Home/>} />  
+          <Route element={<PrivateRoutes/>}>
+            <Route path="/register-company" element={<CreateCompany/>} /> 
+            <Route path="/profile" element={<UserProfile/>} /> 
+            <Route path="/new-post" element={<NewPost />} />
+          </Route>  
+          <Route path="/remote-work/:jobId" element={<JobDetail/>} />  
           <Route path="/signup" element={<SignUp />} />
           <Route path="/activate/:uid/:token" element={<Activate/>}/>
           <Route path="/login" element={<Login/>} />
-          <Route path="/register-company" element={<CreateCompany/>} /> 
-          <Route path="/profile" element={<UserProfile/>} />                       
-      </Routes>
-    </>
+                                
+       </Routes>
+    </Router>
   );
 }
 

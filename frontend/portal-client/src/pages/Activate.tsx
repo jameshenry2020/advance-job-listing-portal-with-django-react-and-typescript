@@ -26,7 +26,6 @@ const Activate = () => {
 
   return (
     <div>
-        <Navbar/>
         <div className='mt-10 w-full py-4 flex justify-center items-center'>
             <div className='w-[60%] mx-auto text-center'>
             <p className='text-xl font-serif font-medium'>click the button below to activate your account </p> 

@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import Navbar from '../components/Navbar'
 import Banner from '../components/Banner'
 import SearchForm from '../components/SearchForm'
 import Partners from '../components/Partners'
@@ -46,7 +45,6 @@ const Home = () => {
         
   return (
     <div className='w-full h-full relative'>
-    <Navbar/>
     <Banner/>
     <SearchForm/>
     <Partners/>

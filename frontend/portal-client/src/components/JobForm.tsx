@@ -1,26 +1,58 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Form } from './Form'
 import { Editor } from "@tinymce/tinymce-react";
 import { FiChevronDown } from "react-icons/fi";
-import Select from 'react-select';
+import { Select, SelectOption } from './Select';
 import makeAnimated from "react-select/animated"
+import APIRequest from "../axiosapi";
+import { SkillsOption } from "../features/types";
+import axios from 'axios';
 
 
 const animatedComponent = makeAnimated()
-const options = [
-    { value: 1, label: 'Python' },
-    { value: 2, label: 'JavaScript' },
-    { value: 3, label: 'Java' },
-    { value: 4, label: 'React' },
-    { value: 5, label: 'C#' },
-    { value: 6, label: 'Django' },
-    { value: 7, label: 'Nodejs' },
-    { value: 8, label: 'RestAPI' },
-  ];
+// const options = [
+//     { value: 1, label: 'Python' },
+//     { value: 2, label: 'JavaScript' },
+//     { value: 3, label: 'Java' },
+//     { value: 4, label: 'React' },
+//     { value: 5, label: 'C#' },
+//     { value: 6, label: 'Django' },
+//     { value: 7, label: 'Nodejs' },
+//     { value: 8, label: 'RestAPI' },
+//   ];
+
+
 
 const JobForm = () => {
-    const [jobopen, setJobopen]=useState('worldwide')
 
+    const [jobopen, setJobopen]=useState('worldwide')
+    const [skills, setSkills]=useState<SkillsOption[]>([])
+    const [jobform, setJobform]=useState({
+        job_title:"",
+        category:"",
+
+    })
+
+    const [selectskill, setSelectSkill]=useState<SelectOption[]>([])
+    console.log(selectskill)
+
+        useEffect(() => {
+           getSkillsfromBackend();
+        }, [])
+
+        const getSkillsfromBackend=()=>{
+              axios.get(`${process.env.REACT_APP_BACKEND_URL}skills/`)
+             .then((res)=>{
+                const results:SkillsOption[]=res.data
+                setSkills(results)
+                return results
+                
+             }).catch((err)=>{
+    
+             })
+            }
+    
+   
     const handleRadiochange = (e:React.ChangeEvent<HTMLInputElement>)=>{
         setJobopen(e.target.value)
     }
@@ -63,7 +95,7 @@ const JobForm = () => {
 
                         <div className="w-full  px-3 mb-4 md:mb-0">
                         <label htmlFor="" className='block text-gray-700 text-sm font-medium font-sans'>Required Skills</label> 
-                        <Select options={options} isMulti isSearchable className='px-4 py-2' components={animatedComponent}/>  
+                        <Select options={skills} multiple value={selectskill} onChange={o=> setSelectSkill(o)}/>  
                         </div>
         
                     </div>
@@ -161,6 +193,7 @@ const JobForm = () => {
         </div>
     </div>
   )
+
 }
 
-export default JobForm
+export default JobForm;
