@@ -21,6 +21,31 @@ export type Skills={
     name:string
 }
 
+export type NewJobType={
+    job_title:string
+    category:string,
+    skills:number[],
+    job_type:string,
+    region:string,
+    job_zone:string,
+    salary:string,
+    application:string,
+    job_description:string
+}
+
+export type CreateJobType={
+    job_title:string
+    category:string,
+    skills:number[],
+    job_type:string,
+    region:string,
+    job_zone:string,
+    salary:string,
+    application:string
+    job_description:string
+}
+
+
 
 export type JobData={
     id:string,

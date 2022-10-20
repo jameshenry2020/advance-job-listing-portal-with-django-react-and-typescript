@@ -6,7 +6,7 @@ const Job = ({job_title, job_description,salary, job_type, category, nums_of_app
   return (
     <div className='w-full  mb-2   text-gray-700'>
       
-        <div className='w-[70%] mx-auto h-32 bg-white border border-gray-300 shadow-md'>
+        <div className='w-[70%] mx-auto h-auto bg-white border border-gray-300 shadow-md'>
             <h2 className='text-gray-600 text-left px-6 py-2 capitalize'>{job_title}</h2>
             <p className='text-left px-6'>{job_description}</p>
             <div className='w-full h-10 shadow-md flex justify-evenly bg-gray-200'>

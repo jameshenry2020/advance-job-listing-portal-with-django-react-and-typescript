@@ -1,8 +1,8 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { JobData, SearchParam } from "../types";
+import { JobData, SearchParam, NewJobType, CreateJobType, AuthError } from "../types";
 import APIRequest from "../../axiosapi";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 export const getJobList=createAsyncThunk('jobs/getJobList', 
 
@@ -34,6 +34,28 @@ export const getJobDetails=createAsyncThunk('jobs/getJobDetails',
       return response
 })
 
+export const createNewJobPost=createAsyncThunk<
+NewJobType,
+CreateJobType,
+{
+    rejectValue:AuthError
+}
+>('jobs/createNewJobPost', 
+async (data, {rejectWithValue}) => {
+    try {
+        const res = await APIRequest.post('add-jobs/', data)
+        const result:NewJobType = res.data
+        return result
+     } catch (err:any) {
+        let error: AxiosError<AuthError> = err // cast the error for access
+        if (!error.response) {
+        throw err
+        }
+            // We got validation errors, let's return those so we can reference in our component and set form errors
+        return rejectWithValue(error.response.data)
+     }
+})
+
 
 interface ResponseType{
     count:number
@@ -50,6 +72,7 @@ type StateType={
     loading:boolean
     error:string
     job_detail:JobData
+    new_job:NewJobType
 
 }
 
@@ -88,7 +111,19 @@ const initialState:StateType={
         job_zone: null,          
         application: '',
         job_description:''
+    },
+    new_job:{
+        job_title:"",
+        category:"",
+        skills:[],
+        job_type:"",
+        region:"",
+        job_zone:"",
+        salary:"",
+        application:"",
+        job_description:""
     }
+
 }
 
 const jobSlice= createSlice({
@@ -160,6 +195,25 @@ const jobSlice= createSlice({
                 state.error=action.error.message || "";
                 state.loading=false;
             } 
+        })
+
+        .addCase(createNewJobPost.pending, (state)=>{
+            state.loading=true
+
+        })
+        .addCase(createNewJobPost.fulfilled, (state, action)=>{
+            state.loading=false
+            state.new_job=action.payload
+            
+        })
+        .addCase(createNewJobPost.rejected, (state, action)=>{
+            if (action.payload) {   
+                state.error = action.payload.errorMessage
+                state.loading=false
+              } else {
+                state.error = action.error.message || "" 
+                state.loading=false
+              }
         })
 
     },

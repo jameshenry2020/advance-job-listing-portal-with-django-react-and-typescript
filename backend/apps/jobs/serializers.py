@@ -32,7 +32,8 @@ class CreateJobSerializer(serializers.ModelSerializer):
             "region",
             "job_zone",
             "salary",
-            "application"
+            "application",
+            "job_description"
         ]
 
     def create(self, validated_data):

@@ -27,7 +27,7 @@ const Home = () => {
         setPreviousUrl(joblists.jobs.previous)
        }
      
-     }, [joblists.jobs.next])
+     }, [joblists.jobs.next, joblists.jobs.previous])
      
 
      const {jobs:{results}, loading}=joblists
@@ -44,11 +44,11 @@ const Home = () => {
      
         
   return (
-    <div className='w-full h-full relative'>
+    <div className='w-full h-full'>
     <Banner/>
     <SearchForm/>
     <Partners/>
-       {loading ? " loading ..." : results.length == 0  ? (
+       {loading ? " loading ..." : results.length === 0  ? (
         <p className='text-gray-600 mb-2 text-2xl text-center mt-4'>no job listing match your search </p>
        ) : ( 
           <>

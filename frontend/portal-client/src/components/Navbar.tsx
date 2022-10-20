@@ -44,7 +44,7 @@ const Navbar = () => {
     <div className={`w-full  ${stickyClass} `}>
         <div className='container flex mx-auto px-4 py-2 justify-between items-center'>
                 <div>
-                  <Link to={'/'}><h1 className='font-extrabold text-3xl capitalize  text-blue-600 px-2 py-2'>sitelogo</h1></Link>
+                  <Link to={'/'}><h1 className='font-extrabold text-3xl capitalize  text-blue-600 px-2 py-2'>TechJobs</h1></Link>
                 </div>
                 <div className='hidden md:flex'>
                     <ul className='flex px-4  space-x-4'>
