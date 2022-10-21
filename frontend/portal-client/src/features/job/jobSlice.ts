@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { JobData, SearchParam, NewJobType, CreateJobType, AuthError } from "../types";
+import { JobData, SearchParam, NewJobType, CreateJobType, AuthError, ApplyData, ApplicationType} from "../types";
 import APIRequest from "../../axiosapi";
 import axios, { AxiosError } from "axios";
 
@@ -56,6 +56,38 @@ async (data, {rejectWithValue}) => {
      }
 })
 
+export const jobApplication=createAsyncThunk<
+ApplicationType,
+ApplyData,
+{
+    rejectValue:AuthError
+}
+
+>('jobs/jobApplication',
+async (data, {rejectWithValue}) => {
+    const {applicant_name, email, position, resume, github_link, portfolio_link}=data
+     try {
+        let applyform = new FormData()
+        applyform.append('applicant_name', applicant_name)
+        applyform.append('email', email)
+        applyform.append('position', position)
+        applyform.append('resume',resume)
+        applyform.append('github_link', github_link)
+        applyform.append('portfolio_link', portfolio_link)
+
+        const response = await APIRequest.post('job/application/', applyform)
+        const result:ApplicationType=response.data
+        return result
+     } catch (err:any) {
+        let error:AxiosError<AuthError> =err
+               if(!error.response){
+                   throw err
+               }
+               return rejectWithValue(error.response.data)
+        
+    }
+})
+
 
 interface ResponseType{
     count:number
@@ -70,9 +102,10 @@ interface ResponseType{
 type StateType={
     jobs:ResponseType
     loading:boolean
-    error:string
+    errors:string
     job_detail:JobData
     new_job:NewJobType
+    applications:ApplicationType[]
 
 }
 
@@ -85,7 +118,7 @@ const initialState:StateType={
         results:[],
     },
     loading:false,
-    error:"",
+    errors:"",
     job_detail:{
         id:'',
         pkid: 0,
@@ -122,7 +155,8 @@ const initialState:StateType={
         salary:"",
         application:"",
         job_description:""
-    }
+    },
+    applications:[]
 
 }
 
@@ -145,7 +179,7 @@ const jobSlice= createSlice({
         })
         .addCase(getJobList.rejected, (state, action)=>{
             if (action.error){
-                state.error=action.error.message || "";
+                state.errors=action.error.message || "";
                 state.loading=false;
             } 
         })
@@ -161,7 +195,7 @@ const jobSlice= createSlice({
         })
         .addCase(getNextPreviousJobList.rejected, (state, action)=>{
             if (action.error){
-                state.error=action.error.message || "";
+                state.errors=action.error.message || "";
                 state.loading=false;
             } 
         })
@@ -176,7 +210,7 @@ const jobSlice= createSlice({
         })
         .addCase(searchJobList.rejected, (state, action)=>{
             if (action.error){
-                state.error=action.error.message || "";
+                state.errors=action.error.message || "";
                 state.loading=false;
             } 
         })
@@ -192,7 +226,7 @@ const jobSlice= createSlice({
         })
         .addCase(getJobDetails.rejected, (state, action)=>{
             if (action.error){
-                state.error=action.error.message || "";
+                state.errors=action.error.message || "";
                 state.loading=false;
             } 
         })
@@ -208,10 +242,29 @@ const jobSlice= createSlice({
         })
         .addCase(createNewJobPost.rejected, (state, action)=>{
             if (action.payload) {   
-                state.error = action.payload.errorMessage
+                state.errors = action.payload.errorMessage
                 state.loading=false
               } else {
-                state.error = action.error.message || "" 
+                state.errors = action.error.message || "" 
+                state.loading=false
+              }
+        })
+
+        .addCase(jobApplication.pending, (state)=>{
+            state.loading=true
+
+        })
+        .addCase(jobApplication.fulfilled, (state, action)=>{
+            state.loading=false
+            state.applications.push(action.payload)
+            
+        })
+        .addCase(jobApplication.rejected, (state, action)=>{
+            if (action.payload) {   
+                state.errors = action.payload.errorMessage
+                state.loading=false
+              } else {
+                state.errors = action.error.message || "" 
                 state.loading=false
               }
         })

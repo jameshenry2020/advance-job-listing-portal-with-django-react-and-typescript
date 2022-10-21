@@ -17,6 +17,8 @@ import { ToastContainer } from "react-toastify";
 import Activate from './pages/Activate';
 import Navbar from './components/Navbar';
 import PrivateRoutes from './utils/PrivateRoutes';
+import JobApplication from './pages/JobApplication';
+import Success from './pages/Success';
 
 
 
@@ -34,6 +36,8 @@ function App() {
           </Route>  
           <Route path="/remote-work/:jobId" element={<JobDetail/>} />  
           <Route path="/signup" element={<SignUp />} />
+          <Route path='/jobs/apply/:job_id' element={<JobApplication/>}/>
+          <Route path='/application-success' element={<Success/>}/>
           <Route path="/activate/:uid/:token" element={<Activate/>}/>
           <Route path="/login" element={<Login/>} />
                                 

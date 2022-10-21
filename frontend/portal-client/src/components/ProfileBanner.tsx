@@ -20,8 +20,8 @@ const ProfileBanner = ({check}:ProfileProps) => {
 
   
   return (
-    <div className='w-full pt-12'>
-        <div className='w-[90%] mx-auto flex items-center space-x-4 p-4 rounded-md h-44 border border-indigo-500 shadow-md bg-indigo-300'>
+    <div className='w-full pt-16'>
+        <div className='w-[90%] mx-auto flex items-center mt-4 space-x-4 p-4 rounded-md h-44 border border-indigo-500 shadow-md bg-indigo-300'>
           {check.hasCompany ==true ? (
               <>
                  <div>

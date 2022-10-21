@@ -66,30 +66,22 @@ const JobForm = () => {
 
     let jskills:any=[]
     const {category, job_type, region, job_zone, salary }=jobform
-    const handleSubmit = (e:React.SyntheticEvent)=>{
+    const handleSubmit = async (e:React.SyntheticEvent)=>{
             e.preventDefault();
             if (selectskill.length > 0) {
                 for(var skill of selectskill){
                     jskills.push(skill.value)
                 }
             }
-            const data={job_title, category, job_type, 'skills':jskills,  salary, application, region, job_zone, 'job_description':description}
-            if (Boolean(data)) {
-                 dispatch(createNewJobPost(data))
-                 toast.success("a new job post is added")
-                 setJobform({
-                    category:"",
-                    job_type:"",
-                    region:"",
-                    salary:"",
-                    job_zone:"",
-                 })
-                 setJobTitle("")
-                 setDescription("")
-                 setApplication("")
-            }else{
-                toast.error('a required field is missing..')
-                return;
+            const data={job_title, category, job_type, 'skills':jskills,  salary, application, region, job_zone, 'job_description':description}     
+            try {
+                const resultj=await dispatch(createNewJobPost(data)).unwrap()
+                navigate('/')
+                toast.success(`a new job post for a ${resultj.job_title} role is added`)
+
+            } catch (rejectedValueOrSerializedError) {
+                console.log(rejectedValueOrSerializedError)
+                toast.error('oop an error ocurred please try again')
             }
     }
   return (

@@ -60,7 +60,8 @@ const CompanyForm = () => {
         <form onSubmit={handleSubmit} className="w-full"> 
               <div className='w-full grid grid-cols-2'>  
                     <div className="w-full  px-3 mb-6 md:mb-0">
-                    <Form name='name' 
+                    <Form 
+                    name='company_name' 
                      onChange={handleFormChange} 
                      value={company_name} 
                      placeholder='Company Name' label='Company Name' />
@@ -82,7 +83,7 @@ const CompanyForm = () => {
                     
                     </div>
                     <div className="w-full px-3">
-                        <Form name='email'
+                        <Form name='company_email'
                         value={company_email}
                         placeholder='your company email'
                         onChange={handleFormChange} 
@@ -92,7 +93,7 @@ const CompanyForm = () => {
                 <div className='mb-4'>
                    <label className='block px-4 text-gray-700 text-sm font-medium font-sans mb-2'>Company Logo</label>
                    <input type="file" 
-                    name="logo"
+                    name="company_logo"
                     onChange={handleFileChange}  
                     placeholder="company logo" className='text-lg shadow appearance-none border-none rounded w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'/> 
                  </div>

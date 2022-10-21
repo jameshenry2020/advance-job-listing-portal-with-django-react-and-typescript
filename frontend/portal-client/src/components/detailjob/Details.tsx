@@ -4,6 +4,8 @@ import { FiMapPin } from "react-icons/fi";
 import { FaGlobeAmericas } from "react-icons/fa";
 import { JobData } from '../../features/types';
 import Moment from 'react-moment';
+import { checkifEmail } from '../../utils/config';
+import { Link } from 'react-router-dom';
 
 type JobProp={
     job:JobData
@@ -11,6 +13,11 @@ type JobProp={
 
 
 const Details = ({job}:JobProp) => {
+
+    const openInNewtab=(url:string)=>{
+        window.open(url, '_blank', 'noopener,noreferrer')
+    }
+
   return (
     <div className='w-full h-screen mb-6'>
         <div className='grid grid-cols-12 gap-4'>
@@ -37,24 +44,32 @@ const Details = ({job}:JobProp) => {
                 <ul>
                     <li className='text-start'>good communication skill </li>
                     <li className='text-start'>moderate knowledge of Nodejs </li>
-                    <li className='text-start'>good communication skill </li>
-                    <li className='text-start'>good communication skill </li>
                 </ul>
                 </p>
                 <h4 className='text-2xl font-bold font-serif'>About the Company</h4>
                 <p className='font-thin text-lg font-sans'>
                     {job.company.description}
                 </p>
-                <button className='py-1 bg-red-500 hover:bg-red-900 text-white font-semibold'>Apply for this position</button>
+                {checkifEmail(job.application) ? (
+                    <Link to={`/jobs/apply/${job.pkid}`} className='py-1 px-2 mb-4 bg-red-500 hover:bg-red-900 text-white font-semibold'>Apply for this position</Link>
+                ): (
+                    <button onClick={()=>openInNewtab(job.application)} className='py-1 bg-red-500 hover:bg-red-900 text-white font-semibold'>Apply for this position</button>
+                )}
+                
             </div>
             <div className='w-full border col-span-4'>
                 <div className='w-[80%] h-[65vh] border shadow-md bg-white'>
                     <div className='w-full h-full mx-auto flex flex-col justify-center items-center space-y-2'>
-                        <img src={job.company.company_logo} alt="" className='w-20 h-20' />
+                        <img src={`http://localhost:8000${job.company.company_logo}`} alt="" className='w-20 h-20' />
                         <p>{job.company.company_name}</p>
                         <p className='flex items-center'><FiMapPin size={20} color='gray' className='mr-1'/>{job.company.location} </p>
                         <p className='flex items-center cursor-pointer'><FaGlobeAmericas size={20} className='mr-1' />{job.company.website}</p>
-                        <button className='py-1 bg-indigo-500 text-gray-200'>Apply Now</button>
+                        {checkifEmail(job.application) ?  (
+                            <Link to={`/jobs/apply/${job.pkid}`} className='py-1 px-2 bg-indigo-500 text-gray-200'>Apply Now</Link>
+                        ): ( 
+                            <button onClick={()=> openInNewtab(job.application)} className='py-1 bg-indigo-500 text-gray-200'>Apply Now</button>
+                        )}
+                        
                     </div>
                 </div>
             </div>

@@ -109,3 +109,22 @@ export type SignupDataType={
     password:string,
     re_password:string
 }
+
+export type ApplyData={
+    applicant_name:string,
+    email:string,
+    position:any,
+    resume:File | string,
+    github_link:string,
+    portfolio_link:string
+}
+export type ApplicationType={
+    id:string,
+    applicant_name:string,
+    email:string,
+    position:number,
+    resume:File | string,
+    github_link:string,
+    portfolio_link:string
+
+}
