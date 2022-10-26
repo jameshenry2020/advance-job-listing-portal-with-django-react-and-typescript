@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import APIRequest from "../../axiosapi";
+import axios from "axios";
 import { UserReturnData, LoginReturnType, AuthError, SignupDataType } from "../types";
 import { AxiosError } from "axios";
+
 
 
 type loginType={
@@ -12,6 +14,14 @@ type loginType={
 type activateData={
     uid:string,
     token:string
+}
+type oauth2Params={
+    code:any
+    state:any, 
+}
+type Oauth2ReturnType={
+    access:string,
+    refresh:string
 }
 
 // signup action creator
@@ -69,10 +79,52 @@ export const loginUser=createAsyncThunk<
         throw err
         }
             // We got validation errors, let's return those so we can reference in our component and set form errors
-        return rejectWithValue(error.response.data)
+            return rejectWithValue(error.response.data)
      }
    }
 )
+
+//signin with google oauth2
+// export const authenticateWithGoogle=createAsyncThunk<
+//  Oauth2ReturnType,
+//  oauth2Params,
+//  {
+//     rejectValue:AuthError
+//  }
+// >(
+//     "auth/authenticateWithGoogle",
+//    async (data, thunkAPI ) => { 
+//      try {
+//         const {state, code}=data
+     
+//         const config = {
+//             headers: {
+//                 'Content-Type':'application/x-www-form-urlencoded'
+//             }}
+//         const post_data={
+//             'code':code,
+//             'state':state
+            
+//         }
+        
+//         axios.defaults.withCredentials = true;
+//         const formbody=Object.keys(post_data).map(key=> encodeURIComponent(key)+'='+encodeURIComponent(post_data[key as keyof oauth2Params])).join('&')
+        
+//            const response= await axios.post(`${process.env.REACT_APP_BACKEND_URL}auth/o/google-oauth2/?${formbody}`,  config)
+//            const result:Oauth2ReturnType =response.data;
+//            return result
+          
+     
+//     } catch (err:any) {
+//         let error: AxiosError<AuthError> = err // cast the error for access
+//             if (!error.response) {
+//             throw err
+//             }else{
+//             return thunkAPI.rejectWithValue(error.response.data)
+//             }      
+        
+//     }
+// })
 
 export const getLoggedInUser=createAsyncThunk(
     'auth/getLoggedInuser',
@@ -236,6 +288,35 @@ const authSlice=createSlice({
                 state.isAuthenticated=false
               }
         })
+
+    //     .addCase(authenticateWithGoogle.pending, (state)=>{
+    //         state.loading=true
+    //         state.isAuthenticated=false
+    //     })
+    //     .addCase(authenticateWithGoogle.fulfilled, (state, action)=>{
+    //         console.log(action.payload)
+    //         localStorage.setItem('token', action.payload.access)
+    //         localStorage.setItem('refresh_token', action.payload.refresh)
+    //         state.auth=action.payload
+    //         state.isAuthenticated=true
+    //         state.isSuccess=true
+    //         state.loading=false       
+    //        state.message="login success"
+    //        state.errors=""
+    //    })
+    //    .addCase(authenticateWithGoogle.rejected, (state, action)=>{
+    //        if (action.payload) {
+    //            state.isSuccess=false
+    //            state.errors = action.payload.errorMessage
+    //            state.isAuthenticated=false
+    //          } else {
+    //            state.errors = action.error.message
+    //            state.isSuccess=false
+    //            state.isAuthenticated=false
+    //          }
+    //    })
+
+
 
         .addCase(getLoggedInUser.pending, (state)=>{
             state.loading=true

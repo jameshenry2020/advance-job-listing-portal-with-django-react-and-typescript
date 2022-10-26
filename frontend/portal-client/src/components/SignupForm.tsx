@@ -107,8 +107,8 @@ const { auth, errors, message}=userState
                 </div>      
             </form>
              <div className='w-full  px-8  flex justify-center items-center flex-col'>
-                 <p className='mb-4 text-lg font-thin text-center'><small>or signup with ...</small></p>
-                 <button className='py-1 mb-2 px-2 flex items-center w-72 bg-blue-600 hover:bg-blue-900 text-white '> <span className='px-4 py-2 rounded bg-white box-border mr-2'><FcGoogle size={30} className=''/></span> Sign Up with Google</button>
+                 {/* <p className='mb-4 text-lg font-thin text-center'><small>or signup with ...</small></p>
+                 <button className='py-1 mb-2 px-2 flex items-center w-72 bg-blue-600 hover:bg-blue-900 text-white '> <span className='px-4 py-2 rounded bg-white box-border mr-2'><FcGoogle size={30} className=''/></span> Sign Up with Google</button> */}
                  <p className='mb-4 text-lg text-gray-800 font-semibold text-center'>already have an account <Link to='/login' className='text-indigo-500'>Sign in here</Link></p>
              </div>
         </div>

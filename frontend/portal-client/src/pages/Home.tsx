@@ -6,8 +6,12 @@ import JobCard from '../components/JobCard'
 import { JobData } from '../features/types'
 import { getJobList, getNextPreviousJobList } from "../features/job/jobSlice";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
+import { useLocation } from 'react-router-dom'
+import queryString from "query-string";
+
 
 const Home = () => {
+  const location=useLocation()
    const [nextUrl, setNextUrl]=useState<string | null>(null)
    const [previousUrl, setPreviousUrl]=useState<string | null>(null)
 
@@ -18,6 +22,8 @@ const Home = () => {
         dispatch(getJobList());
         
      }, [dispatch])
+
+   
 
      useEffect(() => {
       if (joblists.jobs.next !== null) {
