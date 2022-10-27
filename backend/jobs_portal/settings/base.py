@@ -129,12 +129,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1022570077843-pttfei8bctlsj2i2bu5m8vpllho32iqm.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE=['https://www.googleapis.com/auth/userinfo.email',
-                                              'https://www.googleapis.com/auth/userinfo.profile', 'openid']
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA=['first_name', 'last_name']
-
 
 
 SWAGGER_SETTINGS = {
@@ -189,8 +183,7 @@ DJOSER = {
     "EMAIL": {
         "activation": "djoser.email.ActivationEmail" # app being your app's name
     },
-    'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:3000', 'http://localhost:3000/login']
+  
 }
 
 # Internationalization
